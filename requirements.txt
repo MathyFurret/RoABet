@@ -1,0 +1,5 @@
+numpy==1.22.0
+opencv-python==4.5.5.62
+pywin32==303
+PyYAML==6.0
+vgamepad==0.0.8
