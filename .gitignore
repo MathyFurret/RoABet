@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 env/
 
-config/
+config/*
+!config/config_example.yaml
 # config/db/
 # config.yaml

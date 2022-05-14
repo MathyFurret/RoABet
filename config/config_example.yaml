@@ -1,0 +1,9 @@
+# Path to the steamapps directory
+steam_dir: "C:\\Program Files (x86)\\Steam\\steamapps\\"
+# Path to Rivals of Aether executable
+game_path: "common\\Rivals of Aether\\RivalsofAether.exe"
+# Path to Rivals of Aether workshop content
+workshop_path: "workshop\\content\\383980"
+
+# Enable this to run a very basic version of the game loop -- disables DB entirely
+basic_mode: false

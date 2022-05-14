@@ -63,4 +63,40 @@ async def main():
         # await controllers.quit()
         # break
 
-asyncio.run(main())
+async def basic_main():
+    from vgamepad import XUSB_BUTTON as BUTTONS
+    print("Starting game...")
+    os.startfile(Path(config['steam_dir']) / config['game_path'])
+    print("Starting controllers...")
+    controllers = Controllers(2)
+    await asyncio.sleep(30)
+    await controllers.init_local_play()
+    await controllers.init_com_players()
+    await controllers.each_player(lambda p: p.set_difficulty(9))
+    await controllers.change_settings(stock=3, time=5)
+    while True:
+        # controllers are already set to random cpu
+        await controllers.players[0].press_button(BUTTONS.XUSB_GAMEPAD_START)
+        await asyncio.sleep(2)
+        await controllers.players[0].press_button(BUTTONS.XUSB_GAMEPAD_A)
+
+        win_detection_process = await asyncio.create_subprocess_exec(
+            'env/Scripts/python', '-m', 'roabet.screenreader.win_detection_process', 
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE)
+        print("Game started. Awaiting result...")
+        stdout, stderr = await win_detection_process.communicate()
+        if win_detection_process.returncode:
+            print("Win detector crashed!")
+            print(stderr.decode())
+            break
+        else:
+            winner = json.loads(stdout.decode())['winner']
+            print(f"Result: Player {winner} wins!")
+        
+        await asyncio.sleep(10)
+
+if config['basic_mode']:
+    asyncio.run(basic_main())
+else:
+    asyncio.run(main())
